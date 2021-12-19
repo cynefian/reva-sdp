@@ -1,0 +1,73 @@
+pipeline{
+	options{
+		disableConcurrentBuilds()
+		buildDiscarder(logRotator(numToKeepStr: '10'))
+	}
+	
+	environment{
+		APP_VERSION = "1.0"
+		PROJECT_NAME = "Skills Development Program"
+	}
+	
+	agent any
+	
+	stages{
+	
+		stage('BUILD'){
+		    when {
+			   not {
+				   branch 'master'
+			   }
+		   }
+			steps{
+				script {
+                			GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+				}
+				echo "**************************************************"
+				echo "Git Hash: ${GIT_COMMIT_HASH}"
+				echo "**************************************************"
+			    sh '''
+			 			mvn -f pom.xml clean compile package -Dmaven.test.skip=true
+			 		'''	
+                }
+			}
+			post{
+			  success{
+		            archiveArtifacts artifacts: 'target/**/*.war', fingerprint: true
+			    }
+			}
+		}
+		
+		stage('Deploy'){
+		    when {
+				   branch 'master'
+		   }
+		    steps{
+				timeout(time:5, unit:'MINUTES'){
+					input(message: "Do you want to Deploy?")
+				}
+				sh '''
+				    docker build -t name/tomcat .
+					docker run -d -p 8080:8080 --name sdp name/tomcat
+				'''
+			}
+			post{
+			    always{
+			    	emailext body: "Successfully Deployed Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+					mimeType: 'text/HTML',
+					to: 'someone@email.com',
+					subject: "Successfully Deployed Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+				}
+			}
+		}
+		
+	}
+	post{
+			    always{
+			    	cleanWs()
+			    	dir("${env.WORKSPACE}@tmp"){
+			    	    deleteDir()
+			    	}
+		    }
+	}
+}
