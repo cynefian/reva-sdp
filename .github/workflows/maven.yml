@@ -24,3 +24,18 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file reva-sdp/pom.xml
+  
+  docker-build:
+   - name: Build Docker Images
+        uses: philips-software/docker-ci-scripts@v3.3.2
+        with:
+          dockerfile: reva-sdp/dockerfile
+          image-name: sdp
+          tags: latest 0.1
+          push-branches: main
+        env:
+          DOCKER_USERNAME: ${{ docker_username }}
+          DOCKER_PASSWORD: ${{ docker_password }}
+          DOCKER_REGISTRY: ghcr.io/sreenigsd
+          GITHUB_ORGANIZATION: cynefian
+    
