@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="reva-sdp">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/reva-sdp/src/main/java"/>
+        <property name="context-root" value="reva-sdp"/>
+        <property name="java-output-path" value="/reva-sdp/bin"/>
+    </wb-module>
+</project-modules>
