@@ -7,7 +7,7 @@ public class SkillsDevelopmentProgram {
 	static Logger log = Logger.getLogger(SkillsDevelopmentProgram.class.getName());
 	
 	public static void main(String[] args) {
-		System.out.println("Welcome to the Skills Development Program");
+		System.out.println("Welcome to the Skills Development Program Reva");
 	//	logMessage();
 	}
 	
