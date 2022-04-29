@@ -12,7 +12,7 @@ public class SkillsDevelopmentProgram {
 	}
 	
 	public static void logMessage() {
-		log.debug("This is a logged message");
+		log.debug("This is Darshan");
 	}
 	
 }
